@@ -7,6 +7,6 @@ data class weather(
       @Json(name="name") val name:String,
       @Json(name="sys") val my_sys:sys,
       @Json(name="weather") val my_weather:List<weather_class>,
-      @Json(name="main")val main:main
+      @Json(name="main")val main_temp:main_temp
 
 )

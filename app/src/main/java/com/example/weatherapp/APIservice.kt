@@ -24,7 +24,7 @@ private val retrofit = Retrofit.Builder()
 
 interface APIservice {
 
-    @GET("data/2.5/weather?")
+    @GET("data/2.5/weather?units=metric")
     suspend fun getnames(
         @Query("lat")lat:String,
         @Query("lon")lon:String,

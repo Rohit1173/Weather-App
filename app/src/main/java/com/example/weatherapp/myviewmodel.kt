@@ -10,24 +10,32 @@ import androidx.lifecycle.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
-import kotlin.math.nextTowards
 
 class myviewmodel(application: Application) : AndroidViewModel(application) {
     var location: FusedLocationProviderClient
     private val context = getApplication<Application>().applicationContext
-   var my_Longitude:String = ""
-   var my_latitude:String = ""
-    lateinit var api:String
+    private var my_Longitude: String? = null
+    fun getLong(): String? {
+        return my_Longitude
+    }
+
+   private var my_latitude:String?=null
+    fun getlat(): String? {
+        return my_latitude
+    }
+
+    private lateinit var api:String
      private val _status = MutableLiveData<String>()
     val status: LiveData<String> = _status
 
-     private val _myname = MutableLiveData<weather>()
-     val myname: LiveData<weather> = _myname
+     private val _myweather = MutableLiveData<weather>()
+     val myname: LiveData<weather> = _myweather
 
     init {
         location = LocationServices.getFusedLocationProviderClient(context)
-        getMarsPhotos()
         getkey()
+        getMyLocation()
+        getweather()
     }
 
      fun getkey() {
@@ -38,11 +46,11 @@ class myviewmodel(application: Application) : AndroidViewModel(application) {
         api=key
     }
 
-    fun getMarsPhotos() {
-        getMyLocation()
+    fun getweather() {
+
         viewModelScope.launch {
             try {
-                _myname.value = myApi.retrofitService.getnames(my_latitude, my_Longitude,api)
+                _myweather.value = myApi.retrofitService.getnames(my_latitude!!, my_Longitude!!,api)
                 _status.value = "SUCCESS"
 
 
@@ -67,7 +75,6 @@ class myviewmodel(application: Application) : AndroidViewModel(application) {
          }
          task.addOnSuccessListener {
              if(it!=null){
-                // Toast.makeText(context,"${it.latitude},${it.longitude}", Toast.LENGTH_LONG).show()
                  my_latitude=it.latitude.toString()
                  my_Longitude=it.longitude.toString()
              }
