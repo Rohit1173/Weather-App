@@ -2,6 +2,7 @@ package com.example.weatherapp
 
 import android.app.Activity
 import android.app.Application
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -16,6 +17,7 @@ class myviewmodel(application: Application) : AndroidViewModel(application) {
     private val context = getApplication<Application>().applicationContext
    var my_Longitude:String = ""
    var my_latitude:String = ""
+    lateinit var api:String
      private val _status = MutableLiveData<String>()
     val status: LiveData<String> = _status
 
@@ -25,12 +27,22 @@ class myviewmodel(application: Application) : AndroidViewModel(application) {
     init {
         location = LocationServices.getFusedLocationProviderClient(context)
         getMarsPhotos()
+        getkey()
     }
+
+     fun getkey() {
+        val ai: ApplicationInfo = context.packageManager
+            .getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+        val value = ai.metaData["keyValue"]
+        val key = value.toString()
+        api=key
+    }
+
     fun getMarsPhotos() {
         getMyLocation()
         viewModelScope.launch {
             try {
-                _myname.value = myApi.retrofitService.getnames(my_latitude, my_Longitude)
+                _myname.value = myApi.retrofitService.getnames(my_latitude, my_Longitude,api)
                 _status.value = "SUCCESS"
 
 

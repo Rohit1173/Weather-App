@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         }
         swipe.setOnRefreshListener {
+            vm.getkey()
             vm.getMarsPhotos()
             vm.myname.observe(this, {
                 txt.text = it.name
