@@ -26,9 +26,9 @@ interface APIservice {
 
     @GET("data/2.5/weather?units=metric")
     suspend fun getnames(
-        @Query("lat")lat:String,
-        @Query("lon")lon:String,
-    @Query("appid")appid:String
+        @Query("lat") lat: String,
+        @Query("lon") lon: String,
+        @Query("appid") appid: String
     ): weather
 }
 

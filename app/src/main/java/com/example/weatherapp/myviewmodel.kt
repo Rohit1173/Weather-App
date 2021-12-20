@@ -15,21 +15,13 @@ class myviewmodel(application: Application) : AndroidViewModel(application) {
     var location: FusedLocationProviderClient
     private val context = getApplication<Application>().applicationContext
     private var my_Longitude: String? = null
-    fun getLong(): String? {
-        return my_Longitude
-    }
-
-   private var my_latitude:String?=null
-    fun getlat(): String? {
-        return my_latitude
-    }
-
-    private lateinit var api:String
-     private val _status = MutableLiveData<String>()
+    private var my_latitude: String? = null
+    private lateinit var api: String
+    private val _status = MutableLiveData<String>()
     val status: LiveData<String> = _status
 
-     private val _myweather = MutableLiveData<weather>()
-     val myname: LiveData<weather> = _myweather
+    private val _myweather = MutableLiveData<weather>()
+    val myname: LiveData<weather> = _myweather
 
     init {
         location = LocationServices.getFusedLocationProviderClient(context)
@@ -38,19 +30,20 @@ class myviewmodel(application: Application) : AndroidViewModel(application) {
         getweather()
     }
 
-     fun getkey() {
+    fun getkey() {
         val ai: ApplicationInfo = context.packageManager
             .getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
         val value = ai.metaData["keyValue"]
         val key = value.toString()
-        api=key
+        api = key
     }
 
     fun getweather() {
 
         viewModelScope.launch {
             try {
-                _myweather.value = myApi.retrofitService.getnames(my_latitude!!, my_Longitude!!,api)
+                _myweather.value =
+                    myApi.retrofitService.getnames(my_latitude!!, my_Longitude!!, api)
                 _status.value = "SUCCESS"
 
 
@@ -60,25 +53,29 @@ class myviewmodel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-     fun getMyLocation() {
-         val task = location.lastLocation
-         if (ActivityCompat.checkSelfPermission(
-                 context,
-                 android.Manifest.permission.ACCESS_FINE_LOCATION
-             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                 context,
-                 android.Manifest.permission.ACCESS_COARSE_LOCATION
-             ) != PackageManager.PERMISSION_GRANTED
-         ){
-             ActivityCompat.requestPermissions(context as Activity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),101)
-             return
-         }
-         task.addOnSuccessListener {
-             if(it!=null){
-                 my_latitude=it.latitude.toString()
-                 my_Longitude=it.longitude.toString()
-             }
+    fun getMyLocation() {
+        val task = location.lastLocation
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                101
+            )
+            return
+        }
+        task.addOnSuccessListener {
+            if (it != null) {
+                my_latitude = it.latitude.toString()
+                my_Longitude = it.longitude.toString()
+            }
 
-         }
-     }
+        }
+    }
 }

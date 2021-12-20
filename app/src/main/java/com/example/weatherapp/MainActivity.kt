@@ -25,19 +25,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var vm:myviewmodel
+    lateinit var vm: myviewmodel
     lateinit var locale: Locale
-    lateinit var sdf:SimpleDateFormat
-    var my_icon:String="01n"
+    lateinit var sdf: SimpleDateFormat
+    var my_icon: String = "01n"
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         binding= ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        vm =ViewModelProvider.AndroidViewModelFactory(application).create(myviewmodel::class.java)
-            vm.getMyLocation()
-        sdf= SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+        vm = ViewModelProvider.AndroidViewModelFactory(application).create(myviewmodel::class.java)
+        vm.getMyLocation()
+        sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
         binding.swipe.setOnRefreshListener {
             vm.getkey()
             vm.getweather()
@@ -51,21 +51,20 @@ class MainActivity : AppCompatActivity() {
                     condition.text = it.my_weather[0].main
                     locale = Locale("", it.my_sys.country)
                     country.text = locale.displayCountry
-                    temp.text=round(it.main_temp.temp.toDouble()).toString()+"°C"
-                    feelsLike.text="feels like "+it.main_temp.feels_like+"°C"
+                    temp.text = round(it.main_temp.temp.toDouble()).toString() + "°C"
+                    feelsLike.text = "feels like " + it.main_temp.feels_like + "°C"
                 }
                 my_icon = it.my_weather[0].icon
 
                 try {
                     binding.icon.load("https://openweathermap.org/img/wn/$my_icon@2x.png")
-                }
-                catch (e:Exception){
+                } catch (e: Exception) {
 
                 }
             })
-            binding.swipe.isRefreshing=false
+            binding.swipe.isRefreshing = false
         }
-        }
+    }
 
     override fun onStart() {
         vm.getkey()
@@ -80,21 +79,20 @@ class MainActivity : AppCompatActivity() {
                 condition.text = it.my_weather[0].main
                 locale = Locale("", it.my_sys.country)
                 country.text = locale.displayCountry
-                temp.text=round(it.main_temp.temp.toDouble()).toString()+"°C"
-                feelsLike.text="feels like "+it.main_temp.feels_like+"°C"
+                temp.text = round(it.main_temp.temp.toDouble()).toString() + "°C"
+                feelsLike.text = "feels like " + it.main_temp.feels_like + "°C"
             }
-            my_icon=it.my_weather[0].icon
+            my_icon = it.my_weather[0].icon
         })
         try {
             binding.icon.load("https://openweathermap.org/img/wn/$my_icon@2x.png")
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
 
         }
         super.onStart()
     }
 
-    }
+}
 
 
 
